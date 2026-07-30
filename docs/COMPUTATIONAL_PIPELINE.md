@@ -1,6 +1,6 @@
 # Computational Pipeline — CD109–CD26 Disruptor Peptide Optimization
 
-De novo sequence generation and multi-stage in silico filtering to optimize a lead peptide disrupting the CD109–CD26 interaction at the CD109 MG4/bait-region interface.
+*De novo sequence generation and multi-stage in silico filtering to optimize a lead peptide disrupting the CD109–CD26 interaction at the CD109 MG4/bait-region interface.
 
 ---
 
@@ -19,7 +19,13 @@ De novo sequence generation and multi-stage in silico filtering to optimize a le
 
 ---
 
-## 2. Baseline Characterization
+## 2. Compute Environment
+
+All generation, filtering, and structure-prediction steps (ProteinMPNN, biophysical triage, MHCnuggets immunogenicity screening, ColabFold) were run in **Google Colab Pro**, on a **high-RAM A100 GPU** runtime. MOE-based structure preparation, energy minimization, visual QC, and protein–protein docking were run locally/on-site (MOE is GUI-driven and not Colab-compatible).
+
+---
+
+## 3. Baseline Characterization
 
 | Metric | Method | Value |
 |---|---|---|
@@ -38,7 +44,7 @@ De novo sequence generation and multi-stage in silico filtering to optimize a le
 
 ---
 
-## 3. Constrained Generation (ProteinMPNN)
+## 4. Constrained Generation (ProteinMPNN)
 
 | Constraint | Setting | Rationale |
 |---|---|---|
@@ -54,28 +60,33 @@ De novo sequence generation and multi-stage in silico filtering to optimize a le
 
 ---
 
-## 4. Solubility Filter (GRAVY)
+## 5. Solubility Filter (GRAVY)
 
 Candidates with GRAVY above the lead were disqualified.
 
-**Yield:** 2,126 → **180** (top 100 advanced)
+**Yield:** 2,126 → **180** (top 100 advanced to manual PeptideCutter passing)
 
 ---
 
-## 5. Proteolytic Stability (PeptideCutter)
+## 6. Proteolytic Stability ([PeptideCutter](https://www.google.com/search?q=md+link+format&oq=md+link+format&gs_lcrp=EgZjaHJvbWUqDQgAEAAYkQIYgAQYigUyDQgAEAAYkQIYgAQYigUyBwgBEAAYgAQyCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDY2OThqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8))
 
-Candidates with **≥7** cleavage sites removed (lead peptide: 9).
+Candidates with **≥7** cleavage sites removed (lead peptide: 9). Includes only chymotrypsin high-sensitivity, pepsin (pH > 2), and trpsin cleavage sites.
 
 **Yield:** 100 → **51**
 
 ---
 
-## 6. Immunogenicity Screening
+## 7. Immunogenicity Screening
 
-Windowed MHC-I/II screen; strong binder = IC50 < 50 nM.
+Sliding-window scan via **MHCnuggets** (local, IC50-based). Strong binder = IC50 < 50 nM.
 
-- **MHC-I:** HLA-A\*02:01, HLA-A\*01:01, HLA-B\*07:02, HLA-B\*44:02
-- **MHC-II:** HLA-DRB1\*01:01, \*03:01, \*04:01, \*07:01, \*11:01, \*15:01
+| MHC class | Window length | Alleles |
+|---|---|---|
+| MHC-I | 9-mer | HLA-A\*02:01, HLA-A\*01:01, HLA-B\*07:02, HLA-B\*44:02 |
+| MHC-II | 15-mer | HLA-DRB1\*01:01, \*03:01, \*04:01, \*07:01, \*11:01, \*15:01 |
+
+Each full-length candidate is decomposed into all overlapping windows of the given length and
+scored against every allele in its class.
 
 | Tier | Definition | Action |
 |---|---|---|
@@ -87,7 +98,7 @@ Windowed MHC-I/II screen; strong binder = IC50 < 50 nM.
 
 ---
 
-## 7. Structure Prediction and Ranking (ColabFold)
+## 8. Structure Prediction and Ranking (ColabFold)
 
 PDBs generated per complex, then ranked on a weighted composite:
 
@@ -102,7 +113,7 @@ ColabFold weighted low due to minimal parity between different peptide folds.
 
 ---
 
-## 8. Structural QC (MOE)
+## 9. Structural QC (MOE)
 
 Output `.pdb` files inspected visually. Many pocket-template folds produced backbone breaks; candidates unrepairable via **Quick Prep** were discarded.
 
@@ -110,13 +121,13 @@ Output `.pdb` files inspected visually. Many pocket-template folds produced back
 
 ---
 
-## 9. Protein–Protein Docking (MOE)
+## 10. Protein–Protein Docking (MOE)
 
 Candidates >20% worse than the lead were removed.
 
 ```
 Peptide → Compute → Prepare → Structure Preparation → Correct
-Peptide → Compute → Energy Minimize            (Amber10)
+Peptide → Compute → Energy Minimize (Amber10)
 Compute → Protein-Protein Dock
 ```
 
@@ -142,7 +153,7 @@ Compute → Protein-Protein Dock
 
 ---
 
-## 10. Final Candidate Set (n = 8)
+## 11. Final Candidate Set (n = 8)
 
 Ordered by `Final_Rank_Score`.
 
@@ -196,7 +207,7 @@ Ranking is composite-driven, so the MOE column is not monotonic. All natural ana
 
 ---
 
-## 11. Pipeline Yield Summary
+## 12. Pipeline Yield Summary
 
 | Stage | Method | In | Out |
 |---|---|---|---|
@@ -210,7 +221,7 @@ Ranking is composite-driven, so the MOE column is not monotonic. All natural ana
 
 ---
 
-## 12. Rationally Designed Synthetic Analogs (n = 5)
+## 13. Rationally Designed Synthetic Analogs (n = 5)
 
 Designed manually by substituting unnatural amino acids (uAAs) into the highest-ranking synthesized analogs at positions carrying known in vivo liabilities.
 
@@ -223,12 +234,12 @@ Designed manually by substituting unnatural amino acids (uAAs) into the highest-
 | S1 | `[Ac]-(D-Ser)-ISSHSSH-(F5-Phe)-S-(D-Lys)-QA-(tLeu)-SLP-[NH2]` | 28 — `SISSHSSHFSKQALSLP` | S1→D-Ser, F9→F5-Phe, K11→D-Lys, L14→tLeu |
 | S2 | `[Ac]-AISAHSSH-(F5-Phe)-SSQS-(Orn)-SLP-[NH2]` | 16 — `AISAHSSHFSSQSKSLP` | F9→F5-Phe, K14→Orn |
 | S3 | `[Ac]-IISSHHSH-(F5-Phe)-(D-Lys)-(Orn)-QALS-(tLeu)-P-[NH2]` | 25 — `IISSHHSHFKKQALSLP` | F9→F5-Phe, K10→D-Lys, K11→Orn, L16→tLeu |
-| S4 | `[Ac]-LIGSHSHH-(F5-Phe)-HSQS-(N-Me-Arg)-S-(tLeu)-(tLeu)-[NH2]` | 14 — `LIGSHSHHFHSQSRSLL` | F9→F5-Phe, R14→N-Me-Arg, L16→tLeu, L17→tLeu |
+| S4 | `[Ac]-LIGSHSHH-(F5-Phe)-HSQS-(α-Me-Arg)-S-(tLeu)-(tLeu)-[NH2]` | 14 — `LIGSHSHHFHSQSRSLL` | F9→F5-Phe, R14→α-Me-Arg, L16→tLeu, L17→tLeu |
 | S5 | `[Ac]-SIASHSAH-(F5-Phe)-(Orn)-HQA-(D-Lys)-SL-(D-Nle)-[NH2]` | 19 — `SIASHSAHFKHQAKSLM` | F9→F5-Phe, K10→Orn, K14→D-Lys, M17→D-Nle |
 
 All length-matched to their parents; frozen anchors (I2, H5, H8, F9, Q12, S15, L16) retained in identity or isosteric substitution.
 
-The cationic positions use three different modifications (Orn, D-Lys, N-Me-Arg) deliberately: all improve proteolytic stability, but spreading minor side-chain/backbone variations tests which best preserves or improves binding affinity.
+The cationic positions use three different modifications (Orn, D-Lys, α-Me-Arg) deliberately: all improve proteolytic stability, but spreading minor side-chain/backbone variations tests which best preserves or improves binding affinity.
 
 ### 12.2 uAA rationale
 
@@ -236,7 +247,7 @@ The cationic positions use three different modifications (Orn, D-Lys, N-Me-Arg) 
 |---|---|---|
 | **Ornithine (Orn)** | Lys, Arg | Keeps the positive charge for electrostatic anchoring; shorter side chain is a poor trypsin substrate. |
 | **D-Lysine (D-Lys)** | Lys | Retains lysine's charge and length exactly, but the D-center is not recognized by trypsin — removes the cleavage site with minimal steric change to the anchor. |
-| **α-Methylarginine (N-Me-Arg)** | Arg | Preserves the guanidinium charge; α-carbon methylation adds a quaternary center that sterically hinders protease recognition and rigidifies toward α-helix. |
+| **α-Methylarginine (α-Me-Arg)** | Arg | Preserves the guanidinium charge; α-carbon methylation adds a quaternary center that sterically hinders protease recognition and rigidifies toward α-helix. |
 | **tert-Leucine (tLeu)** | Leu | *tert*-butyl sterically blocks chymotrypsin/pepsin access and rigidifies toward α-helix; isosteric enough to preserve the L16 anchor. |
 | **Pentafluorophenylalanine (F5-Phe)** | Phe9 | Phe9 is both anchor and dual chymotrypsin/pepsin site, so cannot be deleted. Perfluorination keeps ring geometry and π-stacking; electron-poor ring resists cleavage, C–F bonds metabolically inert. |
 | **D-Norleucine (D-Nle)** | Met17 | D-center blocks carboxypeptidase trimming; also removes the oxidation-prone Met thioether. |
@@ -253,7 +264,7 @@ Caps close both termini to exopeptidases; internal uAAs address endopeptidase si
 
 ---
 
-## 13. Synthesis and Workup
+## 14. Synthesis and Workup
 
 Identical protocol for all 12 peptides (7 natural, 5 synthetic).
 
@@ -277,6 +288,8 @@ Default instrument settings; Fmoc-protected amino acids in DMF.
 
 Product dried, washed with **DCM** to remove residual DMF/DCM, then cleaved and deprotected **20 min at 42 °C**.
 
+For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalents (0.1mmol) of acetic anhydride and DIPEA. Let stir in Razor cleavage tube for 30 minutes and repeated to ensure reaction completion.
+
 **Cocktail (10 mL total):**
 
 | Component | Amount |
@@ -290,9 +303,9 @@ Product dried, washed with **DCM** to remove residual DMF/DCM, then cleaved and 
 
 ### 13.4 Precipitation and isolation
 
-1. Cool at **0 °C** in an ice bath until the peptide crashes out.
+1. Cool at **0°C** in an ice bath until the peptide crashes out.
 2. Reincorporate by vortex mixing.
-3. Centrifuge in diethyl ether: **4 °C, 4,000–5,000 rcf, 5 min — 3 cycles.**
+3. Centrifuge in diethyl ether: **4°C, 4,000–5,000 rcf, 5 min — 3 cycles.**
 4. Between cycles, decant and replace with fresh **0 °C** diethyl ether, vortexing each round.
 5. Air dry after the final spin.
 
@@ -302,13 +315,15 @@ Crude product confirmed by **LC-MS** (target mass), stored in the dedicated pept
 
 ---
 
-## 14. Software and Tools
+## 15. Software and Tools
 
 | Tool | Use |
 |---|---|
 | ProteinMPNN | Constrained de novo sequence generation |
 | ProtParam | GRAVY / hydropathy |
 | PeptideCutter | Protease cleavage site prediction |
+| MHCnuggets | Local, IC50-based immunogenicity screening |
 | ColabFold | Complex structure prediction |
 | MOE | Structure prep, energy minimization, visual QC, protein–protein docking |
 | Amber10 | Force field for peptide energy minimization |
+| Google Colab Pro (A100, high-RAM) | Compute platform for all generation/filtering/ColabFold steps |
