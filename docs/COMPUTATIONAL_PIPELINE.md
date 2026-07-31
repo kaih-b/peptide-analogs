@@ -68,7 +68,7 @@ Candidates with GRAVY above the lead (0.035) were disqualified.
 
 ---
 
-## 6. Proteolytic Stability ([PeptideCutter](https://www.google.com/search?q=md+link+format&oq=md+link+format&gs_lcrp=EgZjaHJvbWUqDQgAEAAYkQIYgAQYigUyDQgAEAAYkQIYgAQYigUyBwgBEAAYgAQyCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDY2OThqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8))
+## 6. Proteolytic Stability ([PeptideCutter](https://web.expasy.org/peptide_cutter/))
 
 Candidates with **≥7** cleavage sites removed (lead peptide: 9). Counts chymotrypsin high-sensitivity, pepsin (pH > 2), and trpsin cleavage sites.
 
