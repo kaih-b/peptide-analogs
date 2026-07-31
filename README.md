@@ -28,8 +28,7 @@ Lead docking benchmark: **−41.1158 kcal/mol** (MOE, mean of top 10 poses). Top
 
 ```
 ├── chemdraw/
-│   ├── lead_structure.cdxml            # Lead peptide structure
-│   ├── natural_structures.cdxml        # 7 synthesized natural analogs
+│   ├── natural_structures.cdxml        # lead structure + 8 natural analogs passing docking
 │   └── uAA_structures.cdxml            # 5 rationally designed uAA analogs
 ├── data/
 │   ├── 01_post_solubility.fasta        # GRAVY-filtered candidates
