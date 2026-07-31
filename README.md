@@ -89,14 +89,9 @@ All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screen
 
 ## Data provenance and known gaps
 
-This repo begins at the ProteinMPNN generation stage (`01_post_solubility.fasta`). Earlier intermediate pools (the full 5,000-sequence and ~2,126 charge-filtered sets) are not archived as standalone files but are **regenerable** from the ProteinMPNN configuration documented in the pipeline (frozen residues, temperature 0.5, solubility/charge bias, position-14 restriction).
+This repo begins at the ProteinMPNN generation stage (`01_post_solubility.fasta`). Earlier intermediate pools (the full 5,000-sequence and 1991 charge-filtered sets) are not archived as standalone files but are **regenerable** from the ProteinMPNN configuration documented in the pipeline (frozen residues, temperature 0.5, solubility/charge bias, position-14 restriction).
 
 **Structures are MOE and ColabFold outputs.** MOE sessions (`.mdb`) were generated interactively in a licensed GUI and cannot be re-run from a notebook; the pipeline documents every setting(site residues, refinement, pose counts, acceptance thresholds) so results are reconstructable even without re-running MOE itself.
-
-### Outstanding
-
-- **Figures not yet uploaded.** `figures/` is currently empty; poster figures 1 and 2 remain to
-  be added.
 
 ---
 
@@ -116,5 +111,5 @@ This repo begins at the ProteinMPNN generation stage (`01_post_solubility.fasta`
 
 ## Reference
 
-Merle N.S. et al. *Complement-related CD109 averts autoimmunity but limits tumor control through
-Th1 and Th17 restraint.*
+N. Merle *et al.*, Complement-related CD109 averts autoimmunity but limits tumor control through Th1 and Th17 restraint. *Manuscript submitted.*
+
