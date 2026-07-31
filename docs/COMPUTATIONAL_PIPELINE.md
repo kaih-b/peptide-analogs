@@ -6,16 +6,16 @@
 
 ## 1. System Definition
 
-**Receptor:** CD109 (UniProt Q6YHK3); signal sequence (**residues 1–21**) excluded.
+**Receptor**: CD109 (UniProt Q6YHK3); signal sequence (**residues 1–21**) excluded.
 
-**Target residues (docking site):**
+**Target residues (docking site)**:
 
 | Region | Residues |
 |---|---|
 | Flexible loop, MG4 domain | E400, W402, S403, G404 |
 | Bait region | Y650, D652, Y655 |
 
-**Lead peptide (Peptide 1):** `HIYTHMSHFIKQCFSLP` (17 aa, C-terminally amidated)
+**Lead peptide (Peptide 1)**: `HIYTHMSHFIKQCFSLP` (17 aa)
 
 ---
 
@@ -34,7 +34,7 @@ All generation, filtering, and structure-prediction steps (ProteinMPNN, biophysi
 | Cleavage sites | PeptideCutter | **9** |
 | Immunogenicity | Windowed MHC-I/II screen | **PASS** (0 strong binders) |
 
-**Cleavage sites (9):**
+**Cleavage sites (9)**:
 
 | Protease | Count | Positions |
 |---|---|---|
@@ -48,31 +48,31 @@ All generation, filtering, and structure-prediction steps (ProteinMPNN, biophysi
 
 | Constraint | Setting | Rationale |
 |---|---|---|
-| Frozen residues | I2, H5, H8, F9, Q12, S15, L16 | Anchors identified during MOE docking |
-| Sequences | 5,000 | Depth to survive downstream filtering |
-| Temperature | 0.5 | Native 0–1 "creativity" parameter |
-| Bias | Favor soluble, α-helix-driving residues; penalize acidic | Avoids hydrophobic-but-stable analogs |
+| Frozen residues | I2, H5, H8, F9, Q12, S15, L16 | Anchors identified during MOE docking and pre-pipeline PyRosetta analysis |
+| Sequences | 5,000 | Depth to survive filtering |
+| Temperature | 0.5 | Native 0–1 "creativity" parameter; parity to survive filtering |
+| Bias | Favor soluble, α-helix-driving residues; penalize acidic | Avoids excessive hydrophobic-but-stable analogs |
 | Conditional mutations | Reduce bulky residues | Bulky side chains clash and shatter the backbone |
-| Position 14 restriction | Ban trypsin/chymotrypsin targets | Initial runs showed severe endopeptidase liability here |
+| Position 14 restriction | Ban trypsin/chymotrypsin targets | Initial runs showed repeated endopeptidase cleavage here |
 | Net charge | +1 or +2 | Aqueous solubility; electrostatic anchoring |
 
-**Yield:** 5,000 → **2,126**
+**Yield**: 5,000 → **2,126**
 
 ---
 
 ## 5. Solubility Filter (GRAVY)
 
-Candidates with GRAVY above the lead were disqualified.
+Candidates with GRAVY above the lead (0.035) were disqualified.
 
-**Yield:** 2,126 → **180** (top 100 advanced to manual PeptideCutter passing)
+**Yield**: 2,126 → **180** (top 100 advanced to manual PeptideCutter passing)
 
 ---
 
 ## 6. Proteolytic Stability ([PeptideCutter](https://www.google.com/search?q=md+link+format&oq=md+link+format&gs_lcrp=EgZjaHJvbWUqDQgAEAAYkQIYgAQYigUyDQgAEAAYkQIYgAQYigUyBwgBEAAYgAQyCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDY2OThqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8))
 
-Candidates with **≥7** cleavage sites removed (lead peptide: 9). Includes only chymotrypsin high-sensitivity, pepsin (pH > 2), and trpsin cleavage sites.
+Candidates with **≥7** cleavage sites removed (lead peptide: 9). Counts chymotrypsin high-sensitivity, pepsin (pH > 2), and trpsin cleavage sites.
 
-**Yield:** 100 → **51**
+**Yield**: 100 → **51**
 
 ---
 
@@ -85,22 +85,21 @@ Sliding-window scan via **MHCnuggets** (local, IC50-based). Strong binder = IC50
 | MHC-I | 9-mer | HLA-A\*02:01, HLA-A\*01:01, HLA-B\*07:02, HLA-B\*44:02 |
 | MHC-II | 15-mer | HLA-DRB1\*01:01, \*03:01, \*04:01, \*07:01, \*11:01, \*15:01 |
 
-Each full-length candidate is decomposed into all overlapping windows of the given length and
-scored against every allele in its class.
+Each full-length candidate is decomposed into all windows of the given length and scored against each allele in its class.
 
 | Tier | Definition | Action |
 |---|---|---|
 | FAILED | Strong binder to ≥2 distinct alleles | Discard |
-| WARNED | Strong binder to exactly 1 distinct allele | Retain; ranking penalty |
+| WARNED | Strong binder to 1 distinct allele | Retain; ranking penalty |
 | PASSED | No strong binders | Retain |
 
-**Yield:** 51 → **48**
+**Yield**: 51 → **48**
 
 ---
 
 ## 8. Structure Prediction and Ranking (ColabFold)
 
-PDBs generated per complex, then ranked on a weighted composite:
+PDBs generated per complex based on a template MSA adapted from the lead peptide's alignment — swapping in each candidate's sequence while preserving the CD109 receptor context — then ranked on a weighted composite:
 
 | Component | Scoring | Weight |
 |---|---|---|
@@ -115,9 +114,9 @@ ColabFold weighted low due to minimal parity between different peptide folds.
 
 ## 9. Structural QC (MOE)
 
-Output `.pdb` files inspected visually. Many pocket-template folds produced backbone breaks; candidates unrepairable via **Quick Prep** were discarded.
+Output `.pdb` files inspected visually. Many pocket-template folds produced backbone breaks; candidates unrepairable via MOE's native **Quick Prep** function were discarded.
 
-**Yield:** 48 → **11**
+**Yield**: 48 → **11**
 
 ---
 
@@ -139,11 +138,11 @@ Compute → Protein-Protein Dock
 | Scoring | Hydrophobic Patch Potential enabled |
 | Poses | 10,000 pre-placement → 1,000 placement → 100 refinement |
 
-**Acceptance:** score = mean of top 10 poses. Poses rejected if `e_conf > −50 kcal/mol` or `rmsd_refine > 2.5 Å`; candidate discarded if <5 of the top 10 qualify.
+**Acceptance**: score = mean of top 10 poses. Poses rejected if `e_conf > −50 kcal/mol` or `rmsd_refine > 2.5 Å`; candidate discarded if <5 of the top 10 qualify.
 
-**Yield:** 11 → **8**
+**Yield**: 11 → **8**
 
-**Removed at this stage:**
+**Removed at this stage**:
 
 | Sequence | Reason |
 |---|---|
@@ -253,7 +252,7 @@ The cationic positions use three different modifications (Orn, D-Lys, α-Me-Arg)
 | **D-Norleucine (D-Nle)** | Met17 | D-center blocks carboxypeptidase trimming; also removes the oxidation-prone Met thioether. |
 | **D-Serine (D-Ser)** | Ser1 | Blocks N-terminal aminopeptidase attack, complementing acetylation. S1 only. |
 
-### 13.3 Terminal capping
+### 13.3 Terminal Capping
 
 All five are N-terminally acetylated and C-terminally amidated.
 
@@ -264,7 +263,7 @@ Caps close both termini to exopeptidases; internal uAAs address endopeptidase si
 
 ---
 
-## 14. Synthesis and Workup
+## 14. Synthesis & Workup
 
 Identical protocol for all 12 peptides (7 natural, 5 synthetic).
 
@@ -272,7 +271,7 @@ Identical protocol for all 12 peptides (7 natural, 5 synthetic).
 
 Rink Amide resin swelled in **10 mL total: 5 mL DCM + 5 mL DMF**. Swirled by hand, incorporated at room temperature — **no stir bar**.
 
-### 14.2 Automated SPPS (CEM LibertyBlue)
+### 14.2 Automated SPPS (CEM Liberty Blue)
 
 Default instrument settings; Fmoc-protected amino acids in DMF.
 
@@ -288,7 +287,7 @@ Default instrument settings; Fmoc-protected amino acids in DMF.
 
 Product dried, washed with **DCM** to remove residual DMF/DCM, then cleaved and deprotected **20 min at 42 °C**.
 
-For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalents (1.0 mmol) of acetic anhydride (0.102 g, 0.094 mL) and DIPEA (0.129 g, 0.175 mL). Let stir in Razor cleavage tube for 30 minute. Repeated (2x total) to ensure reaction completion, as acetylated and non-acetylated variants of the same sequence are very difficult to separate via HPLC.
+For synthetic analogs, perform N-terminal acetylation by adding 10 equivalents (1.0 mmol) of acetic anhydride (0.102 g, 0.094 mL) and DIPEA (0.129 g, 0.175 mL). Let gently stir in Razor cleavage tube for 30 minute. Repeat (2x total) to ensure reaction completion, as acetylated and non-acetylated variants of the same sequence are difficult to separate.
 
 **Cocktail (10 mL total):**
 
@@ -322,7 +321,7 @@ Crude product confirmed by **LC-MS** (target mass), stored in the dedicated pept
 | ProteinMPNN | Constrained *de novo* sequence generation |
 | ProtParam | GRAVY / hydropathy |
 | PeptideCutter | Protease cleavage site prediction |
-| MHCnuggets | Local, IC50-based immunogenicity screening |
+| MHCnuggets | IC50-based immunogenicity screening |
 | ColabFold | Complex structure prediction |
 | MOE | Structure prep, energy minimization, visual QC, protein–protein docking |
 | Amber10 | Force field for peptide energy minimization |
