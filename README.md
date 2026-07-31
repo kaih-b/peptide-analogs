@@ -2,7 +2,7 @@
 
 Computational optimization of a lead peptide that disrupts the **CD109–CD26** interaction, a checkpoint axis that restrains Th1/Th17 immunity and limits CAR T-cell antitumor activity. Starting from the lead peptide `HIYTHMSHFIKQCFSLP`, a multi-stage in silico pipeline reduced 5,000 *de novo* sequences to **8** viable analogs, of which **7** were synthesized; **5** additional analogs were then designed by hand using unnatural amino acids (uAAs).
 
-**Biological context**: CD109 is an activation-induced checkpoint that engages the co-stimulator CD26 to restrain proinflammatory CD4 T cell responses. Transient disruption of this interaction enhances CAR T cell manufacturing and potency against neuroblastoma. This project optimizes the disruptor peptide for stability, solubility, and reduced immunogenicity.
+**Biological context**: CD109 is an activation-induced checkpoint that engages the co-stimulator CD26 to restrain proinflammatory CD4 T-cell responses. Transient disruption of this interaction enhances CAR T-cell manufacturing and potency against neuroblastoma. This project optimizes the disruptor peptide for stability, solubility, and reduced immunogenicity.
 
 Full method: **[`docs/COMPUTATIONAL_PIPELINE.md`](docs/COMPUTATIONAL_PIPELINE.md)**
 
@@ -32,11 +32,11 @@ Lead docking benchmark: **−41.1158 kcal/mol** (MOE, mean of top 10 poses). Top
 │   └── uAA_structures.cdxml            # 5 rationally designed uAA analogs
 ├── data/
 │   ├── 01_post_solubility.fasta        # GRAVY-filtered candidates
-│   ├── 02_post_peptidecutter.txt       # Post-PeptideCutter survivors
-│   ├── 03_post_immunogenicity_*.csv    # MHCnuggets screen results (tabular)
-│   ├── 03_post_immunogenicity.txt      # MHCnuggets screen results (raw log)
-│   ├── 04_post_colabfold_ranked_*.csv  # ColabFold composite ranking
-│   └── 05_post_moe_ranked.csv          # Final MOE-docked ranking (the 8)
+│   ├── 02_post_peptidecutter.txt       # post-PeptideCutter candidates
+│   ├── 03_post_immunogenicity.txt      # post-MHCnuggets candidates (sequences)
+│   ├── 03_post_immunogenicity_metrics.csv    # post-MHCnuggets candidates with previous metrics
+│   ├── 04_post_colabfold_ranked.csv  # ColabFold composite ranking
+│   └── 05_post_moe_ranked.csv          # Final MOE-docked composite ranking
 ├── docs/
 │   └── COMPUTATIONAL_PIPELINE.md       # Full method, parameters, candidate tables
 ├── figures/                            # Final poster, ChimeraX + BioRender figures
@@ -48,11 +48,11 @@ Lead docking benchmark: **−41.1158 kcal/mol** (MOE, mean of top 10 poses). Top
 │   │   ├── cd109_cd26_dimer_complex.pdb    # AF2 prediction, CD26 dimer (no interaction)
 │   │   └── cd109_cd26_monomer_complex.pdb  # AF2 prediction, CD26 monomer (binding-competent)
 │   ├── colabfold/
-│   │   ├── complexes/                  # Predicted complexes, 11 passing MOE QC
+│   │   ├── complexes/                  # 11 predicted complexes passing MOE QC
 │   │   ├── peptide_solo/               # Solo peptide extracted from each complex
-│   │   └── raw_outputs/                # Unfiltered ColabFold run outputs
+│   │   └── raw_outputs/                # Raw ColabFold run outputs
 │   ├── lead/
-│   │   ├── lead_complex.a3m            # MSA / template source for all ColabFold docks
+│   │   ├── lead_complex.a3m            # MSA template source for ColabFold docks
 │   │   ├── lead_complex.pdb            # Lead CD109–peptide complex
 │   │   ├── lead_dock.mdb               # MOE docking session (lead)
 │   │   ├── lead_peptide.pdb            # Separated lead peptide
@@ -67,7 +67,7 @@ Lead docking benchmark: **−41.1158 kcal/mol** (MOE, mean of top 10 poses). Top
 
 ## Compute environment
 
-All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screening, and ColabFold structure prediction were run in **Google Colab Pro** on a **high-RAM A100 GPU** runtime (see `notebooks/`). MOE structure preparation, energy minimization, visual QC, and protein–protein docking (`.mdb` files under `structures/`) were run locally — MOE is a licensed, GUI-driven application and does not run in Colab.
+All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screening, and ColabFold structure prediction were run in **Google Colab Pro** on a **high-RAM A100 GPU** runtime (see `notebooks/`). [PeptideCutter](https://web.expasy.org/peptide_cutter/) was run locally via their webapp; MOE structure preparation, energy minimization, visual QC, and protein–protein docking (`.mdb` files under `structures/`) were run locally in the MOE environment's native GUI.
 
 ---
 
@@ -77,7 +77,7 @@ All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screen
 |---|---|
 | The full method and every parameter | `docs/COMPUTATIONAL_PIPELINE.md` |
 | The final 8 candidates + scoring matrix | `data/05_post_moe_ranked.csv` (mirrored in pipeline doc) |
-| Per-stage attrition (auditable filter outputs) | `data/01_...` through `data/05_...` |
+| Per-stage attrition | `data/01_...` through `data/05_...` |
 | Predicted complexes | `structures/colabfold/complexes/` |
 | Docked poses | `structures/moe_docks/` (sessions), `structures/poses/` (poses) |
 | How the docking templates were built | `structures/lead/` (`.a3m` + complex `.pdb`) |
@@ -90,7 +90,7 @@ All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screen
 
 This repo begins at the ProteinMPNN generation stage (`01_post_solubility.fasta`). Earlier intermediate pools (the full 5,000-sequence and 2,126 charge-filtered sets) are not archived as standalone files but are **regenerable** from the ProteinMPNN configuration documented in the pipeline (frozen residues, temperature 0.5, solubility/charge bias, position-14 restriction).
 
-**Structures are MOE and ColabFold outputs.** MOE sessions (`.mdb`) were generated interactively in a licensed GUI and cannot be re-run from a notebook; the pipeline documents every setting(site residues, refinement, pose counts, acceptance thresholds) so results are reconstructable even without re-running MOE itself.
+**Structures are MOE and ColabFold outputs.** MOE sessions (`.mdb`) were generated interactively in a licensed GUI and cannot be re-run from a notebook; the pipeline documents every setting (site residues, refinement, pose counts, acceptance thresholds) so results are reconstructable even without re-running MOE itself.
 
 ---
 
