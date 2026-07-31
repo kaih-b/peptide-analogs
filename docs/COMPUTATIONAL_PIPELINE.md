@@ -1,6 +1,6 @@
 # Computational Pipeline: CD109–CD26 Disruptor Peptide Optimization
 
-*De novo sequence generation and multi-stage in silico filtering to optimize a lead peptide disrupting the CD109–CD26 interaction at the CD109 MG4/bait-region interface.
+*De novo* sequence generation and multi-stage in silico filtering to optimize a lead peptide disrupting the CD109–CD26 interaction at the CD109 MG4/bait-region interface.
 
 ---
 
