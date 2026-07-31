@@ -40,7 +40,7 @@ Lead docking benchmark: **−41.1158 kcal/mol** (MOE, mean of top 10 poses). Top
 │   └── 05_post_moe_ranked.csv          # Final MOE-docked ranking (the 8)
 ├── docs/
 │   └── COMPUTATIONAL_PIPELINE.md       # Full method, parameters, candidate tables
-├── figures/                            # Poster figures — outstanding, not yet uploaded
+├── figures/                            # Poster figures
 ├── notebooks/
 │   ├── 01_Generation_BiologicalFunnel.ipynb   # ProteinMPNN → GRAVY → PeptideCutter → immunogenicity
 │   └── 02_ManualFold.ipynb                    # ColabFold structure prediction + composite ranking
