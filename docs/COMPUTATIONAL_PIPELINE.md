@@ -157,7 +157,7 @@ Compute → Protein-Protein Dock
 
 Ordered by `Final_Rank_Score`.
 
-### 10.1 Primary metrics
+### 11.1 Primary metrics
 
 | Rank | ID | Sequence | MOE S | GRAVY | Cleavage | Immuno | Synthesis |
 |---|---|---|---|---|---|---|---|
@@ -177,7 +177,7 @@ Ranking is composite-driven, so the MOE column is not monotonic. All natural ana
 - **Analog 16** — lowest proteolytic liability (9 → **4** cleavage motifs), 17.4% docking improvement.
 - **Analog 15** — cleared all computational filters but failed SPPS 3×. Retained for completeness of the in silico record; **not carried forward**. Effective synthesized set = **7**.
 
-### 10.2 Scoring components
+### 11.2 Scoring components
 
 | ID | ipTM | pLDDT | score_gravy | score_cleavage | score_immuno | norm_ipTM | norm_pLDDT | score_cf | Composite | MOE scaled | Final |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -190,7 +190,7 @@ Ranking is composite-driven, so the MOE column is not monotonic. All natural ana
 | 19 | 0.7653 | 71.355 | 0.4368 | 0.25 | 0.0 | 0.5581 | 0.6527 | 0.5818 | 28.92 | 65.06 | **56.02** |
 | 15 | 0.6318 | 71.047 | 0.4852 | 0.25 | 0.0 | 0.1054 | 0.4852 | 0.2003 | 26.56 | 7.30 | **12.12** |
 
-### 10.3 Data dictionary
+### 11.3 Data dictionary
 
 | Column | Definition |
 |---|---|
@@ -223,11 +223,11 @@ Ranking is composite-driven, so the MOE column is not monotonic. All natural ana
 
 ## 13. Rationally Designed Synthetic Analogs (n = 5)
 
-Designed manually by substituting unnatural amino acids (uAAs) into the highest-ranking synthesized analogs at positions carrying known in vivo liabilities.
+Designed manually by substituting unnatural amino acids (uAAs) into synthesized analogs at positions carrying known in vivo liabilities.
 
 > **No computational scores reported.** ProteinMPNN, ProtParam, PeptideCutter, and ColabFold are parameterized on the 20 canonical L-amino acids and reject uAA-containing sequences. These designs are justified mechanistically and require empirical characterization.
 
-### 12.1 Sequences
+### 13.1 Sequences
 
 | # | Sequence | Parent | Substitutions |
 |---|---|---|---|
@@ -241,7 +241,7 @@ All length-matched to their parents; frozen anchors (I2, H5, H8, F9, Q12, S15, L
 
 The cationic positions use three different modifications (Orn, D-Lys, α-Me-Arg) deliberately: all improve proteolytic stability, but spreading minor side-chain/backbone variations tests which best preserves or improves binding affinity.
 
-### 12.2 uAA rationale
+### 13.2 uAA rationale
 
 | uAA | Replaces | Rationale |
 |---|---|---|
@@ -253,7 +253,7 @@ The cationic positions use three different modifications (Orn, D-Lys, α-Me-Arg)
 | **D-Norleucine (D-Nle)** | Met17 | D-center blocks carboxypeptidase trimming; also removes the oxidation-prone Met thioether. |
 | **D-Serine (D-Ser)** | Ser1 | Blocks N-terminal aminopeptidase attack, complementing acetylation. S1 only. |
 
-### 12.3 Terminal capping
+### 13.3 Terminal capping
 
 All five are N-terminally acetylated and C-terminally amidated.
 
@@ -288,7 +288,7 @@ Default instrument settings; Fmoc-protected amino acids in DMF.
 
 Product dried, washed with **DCM** to remove residual DMF/DCM, then cleaved and deprotected **20 min at 42 °C**.
 
-For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalents (0.1mmol) of acetic anhydride and DIPEA. Let stir in Razor cleavage tube for 30 minutes and repeated to ensure reaction completion.
+For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalents (1.0 mmol) of acetic anhydride (0.102 g, 0.094 mL) and DIPEA (0.129 g, 0.175 mL). Let stir in Razor cleavage tube for 30 minute. Repeated (2x total) to ensure reaction completion, as acetylated and non-acetylated variants of the same sequence are very difficult to separate via HPLC.
 
 **Cocktail (10 mL total):**
 
@@ -303,9 +303,9 @@ For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalent
 
 ### 14.4 Precipitation and isolation
 
-1. Cool at **0°C** in an ice bath until the peptide crashes out.
+1. Cool at **0 °C** in an ice bath to crash out peptide.
 2. Reincorporate by vortex mixing.
-3. Centrifuge in diethyl ether: **4°C, 4,000–5,000 rcf, 5 min — 3 cycles.**
+3. Centrifuge in diethyl ether: **4 °C, 4,000–5,000 rcf, 5 min — 3 cycles.**
 4. Between cycles, decant and replace with fresh **0 °C** diethyl ether, vortexing each round.
 5. Air dry after the final spin.
 
@@ -319,7 +319,7 @@ Crude product confirmed by **LC-MS** (target mass), stored in the dedicated pept
 
 | Tool | Use |
 |---|---|
-| ProteinMPNN | Constrained de novo sequence generation |
+| ProteinMPNN | Constrained *de novo* sequence generation |
 | ProtParam | GRAVY / hydropathy |
 | PeptideCutter | Protease cleavage site prediction |
 | MHCnuggets | Local, IC50-based immunogenicity screening |
