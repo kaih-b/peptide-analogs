@@ -1,4 +1,4 @@
-# Computational Pipeline — CD109–CD26 Disruptor Peptide Optimization
+# Computational Pipeline: CD109–CD26 Disruptor Peptide Optimization
 
 *De novo sequence generation and multi-stage in silico filtering to optimize a lead peptide disrupting the CD109–CD26 interaction at the CD109 MG4/bait-region interface.
 
@@ -147,7 +147,7 @@ Compute → Protein-Protein Dock
 
 | Sequence | Reason |
 |---|---|
-| `LISAHSSHFKSQSRSLP` | N-terminus issue from structure preparation |
+| `LISAHSSHFKSQSRSLP` | N-terminus backbone break from structure preparation |
 | `IIIAHHSHFHKQAKSLS` | Positive `e_conf` |
 | `SIAIHHSHFKKQALSLP` | Docking broke backbone |
 
@@ -162,7 +162,7 @@ Ordered by `Final_Rank_Score`.
 | Rank | ID | Sequence | MOE S | GRAVY | Cleavage | Immuno | Synthesis |
 |---|---|---|---|---|---|---|---|
 | — | Lead | `HIYTHMSHFIKQCFSLP` | −41.1158 | 0.035 | 9 | PASS | Benchmark |
-| 1 | 01 | `SISSHSSHFSSQSKSLK` | −49.4678 | −0.812 | 6 | PASS | Synthesized |
+| 1 | 01 | `SISSHSSHFSSQSKSLK` | **−49.4678** | −0.812 | 6 | PASS | Synthesized |
 | 2 | 11 | `LIAAHHAHFHKQSKSLP` | −49.3361 | −0.412 | 5 | WARN | Synthesized |
 | 3 | 16 | `AISAHSSHFSSQSKSLP` | −48.2781 | −0.371 | **4** | WARN | Synthesized |
 | 4 | 14 | `LIGSHSHHFHSQSRSLL` | −48.6115 | −0.382 | 6 | PASS | Synthesized |
@@ -248,7 +248,7 @@ The cationic positions use three different modifications (Orn, D-Lys, α-Me-Arg)
 | **Ornithine (Orn)** | Lys, Arg | Keeps the positive charge for electrostatic anchoring; shorter side chain is a poor trypsin substrate. |
 | **D-Lysine (D-Lys)** | Lys | Retains lysine's charge and length exactly, but the D-center is not recognized by trypsin — removes the cleavage site with minimal steric change to the anchor. |
 | **α-Methylarginine (α-Me-Arg)** | Arg | Preserves the guanidinium charge; α-carbon methylation adds a quaternary center that sterically hinders protease recognition and rigidifies toward α-helix. |
-| **tert-Leucine (tLeu)** | Leu | *tert*-butyl sterically blocks chymotrypsin/pepsin access and rigidifies toward α-helix; isosteric enough to preserve the L16 anchor. |
+| **L-tert-Leucine (tLeu)** | Leu | tert-butyl sterically blocks chymotrypsin/pepsin access and rigidifies toward α-helix; isosteric enough to preserve the L16 anchor. |
 | **Pentafluorophenylalanine (F5-Phe)** | Phe9 | Phe9 is both anchor and dual chymotrypsin/pepsin site, so cannot be deleted. Perfluorination keeps ring geometry and π-stacking; electron-poor ring resists cleavage, C–F bonds metabolically inert. |
 | **D-Norleucine (D-Nle)** | Met17 | D-center blocks carboxypeptidase trimming; also removes the oxidation-prone Met thioether. |
 | **D-Serine (D-Ser)** | Ser1 | Blocks N-terminal aminopeptidase attack, complementing acetylation. S1 only. |
@@ -268,11 +268,11 @@ Caps close both termini to exopeptidases; internal uAAs address endopeptidase si
 
 Identical protocol for all 12 peptides (7 natural, 5 synthetic).
 
-### 13.1 Resin swelling
+### 14.1 Resin swelling
 
 Rink Amide resin swelled in **10 mL total: 5 mL DCM + 5 mL DMF**. Swirled by hand, incorporated at room temperature — **no stir bar**.
 
-### 13.2 Automated SPPS (CEM LibertyBlue)
+### 14.2 Automated SPPS (CEM LibertyBlue)
 
 Default instrument settings; Fmoc-protected amino acids in DMF.
 
@@ -284,7 +284,7 @@ Default instrument settings; Fmoc-protected amino acids in DMF.
 | C-terminus | Amide |
 | Final deprotection | Enabled |
 
-### 13.3 Cleavage and deprotection (CEM Razor)
+### 14.3 Cleavage and deprotection (CEM Razor)
 
 Product dried, washed with **DCM** to remove residual DMF/DCM, then cleaved and deprotected **20 min at 42 °C**.
 
@@ -301,7 +301,7 @@ For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalent
 
 **6–8 mL per peptide.** Final vacuum after deprotection directs product into diethyl ether.
 
-### 13.4 Precipitation and isolation
+### 14.4 Precipitation and isolation
 
 1. Cool at **0°C** in an ice bath until the peptide crashes out.
 2. Reincorporate by vortex mixing.
@@ -309,7 +309,7 @@ For synthetic anaalogs, N-terminal acetylation performed by adding 10 equivalent
 4. Between cycles, decant and replace with fresh **0 °C** diethyl ether, vortexing each round.
 5. Air dry after the final spin.
 
-### 13.5 Validation and storage
+### 14.5 Validation and storage
 
 Crude product confirmed by **LC-MS** (target mass), stored in the dedicated peptide freezer, and transferred to the analytical team for purification.
 
