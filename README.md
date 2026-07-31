@@ -76,7 +76,7 @@ All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screen
 | You want… | Look in |
 |---|---|
 | The full method and every parameter | `docs/COMPUTATIONAL_PIPELINE.md` |
-| The final 8 candidates + scoring matrix | `data/05_post_moe_ranked.csv` (mirrored in pipeline doc §11) |
+| The final 8 candidates + scoring matrix | `data/05_post_moe_ranked.csv` (mirrored in pipeline doc) |
 | Per-stage attrition (auditable filter outputs) | `data/01_...` through `data/05_...` |
 | Predicted complexes | `structures/colabfold/complexes/` |
 | Docked poses | `structures/moe_docks/` (sessions), `structures/poses/` (poses) |
@@ -88,7 +88,7 @@ All ProteinMPNN generation, biophysical triage, MHCnuggets immunogenicity screen
 
 ## Data provenance and known gaps
 
-This repo begins at the ProteinMPNN generation stage (`01_post_solubility.fasta`). Earlier intermediate pools (the full 5,000-sequence and 1991 charge-filtered sets) are not archived as standalone files but are **regenerable** from the ProteinMPNN configuration documented in the pipeline (frozen residues, temperature 0.5, solubility/charge bias, position-14 restriction).
+This repo begins at the ProteinMPNN generation stage (`01_post_solubility.fasta`). Earlier intermediate pools (the full 5,000-sequence and 2,126 charge-filtered sets) are not archived as standalone files but are **regenerable** from the ProteinMPNN configuration documented in the pipeline (frozen residues, temperature 0.5, solubility/charge bias, position-14 restriction).
 
 **Structures are MOE and ColabFold outputs.** MOE sessions (`.mdb`) were generated interactively in a licensed GUI and cannot be re-run from a notebook; the pipeline documents every setting(site residues, refinement, pose counts, acceptance thresholds) so results are reconstructable even without re-running MOE itself.
 
